@@ -1,0 +1,9 @@
+--- 
+- name: Install podman
+  package: name={{item}} state=present
+  with_items:
+    - podman
+    - skopeo
+    - buildah
+  become: true
+

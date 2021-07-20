@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become_method: sudo
+  roles:
+    - common
+    - podman
+    - lab
+
