@@ -1,5 +1,4 @@
 ---
-# TODO: consider adding "build bigapp" here
 - hosts: localhost
   become_method: sudo
   tasks:
