@@ -1,13 +1,13 @@
 FROM registry.access.redhat.com/ubi8
 
->>> No tags on image specification - updates could break things
+# >>> No tags on image specification - updates could break things
 
 LABEL maintainer="student@example.com"
 
 # ADD set up scripts
 ADD  scripts /scripts
 
->>> If a local script changes then we have to rebuild from scratch
+# >>> If a local script changes then we have to rebuild from scratch
 
 RUN chmod 755 /scripts/*
 
@@ -15,8 +15,8 @@ RUN chmod 755 /scripts/*
 RUN yum -y install openssl
 RUN yum -y install psmisc
 
->>> Running a yum clean all in the same statement would clear the yum
->>> cache in our intermediate cached image layer
+# >>> Running a yum clean all in the same statement would clear the yum
+# >>> cache in our intermediate cached image layer
 
 # Deps for wordpress
 RUN yum -y install httpd
@@ -30,25 +30,25 @@ RUN yum -y install mariadb-server
 RUN yum -y install net-tools
 RUN yum -y install hostname
 
->>> Can group all of the above into one yum statement to minimize 
->>> intermediate layers. However, during development, it can be nice 
->>> to keep them separated so that your "build/run/debug" cycle can 
->>> take advantage of layers and caching. Just be sure to clean it up
->>> before you publish. You can check out the history of the image you
->>> have created by running *sudo podman history bigimg*.
+# >>> Can group all of the above into one yum statement to minimize
+# >>> intermediate layers. However, during development, it can be nice
+# >>> to keep them separated so that your "build/run/debug" cycle can
+# >>> take advantage of layers and caching. Just be sure to clean it up
+# >>> before you publish. You can check out the history of the image you
+# >>> have created by running *sudo podman history bigimg*.
 
-# Add in wordpress sources 
+# Add in wordpress sources
 COPY latest.tar.gz /latest.tar.gz
 
->>> Consider using a specific version of Wordpress to control the installed version
+# >>> Consider using a specific version of Wordpress to control the installed version
 
-RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 
+RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1
 RUN rm /latest.tar.gz
 RUN chown -R apache:apache /var/www/
 
->>> Can group above statements into one multiline statement to minimize 
->>> space used by intermediate layers. (i.e. latest.tar.gz would not be 
->>> stored in any image).
+# >>> Can group above statements into one multiline statement to minimize
+# >>> space used by intermediate layers. (i.e. latest.tar.gz would not be
+# >>> stored in any image).
 
 EXPOSE 80
 CMD ["/bin/bash", "/scripts/start.sh"]
