@@ -22,9 +22,9 @@ RUN yum -y install net-tools
 RUN yum -y install hostname
 RUN yum -y install procps
 
-# Add in wordpress sources 
+# Add in wordpress sources
 COPY latest.tar.gz /latest.tar.gz
-RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 
+RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 --no-same-owner
 RUN rm /latest.tar.gz
 RUN chown -R apache:apache /var/www/
 
