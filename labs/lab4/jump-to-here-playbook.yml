@@ -1,0 +1,83 @@
+---
+- hosts: localhost
+  become_method: sudo
+  tasks:
+  - name: build mariadb
+    command: >
+      podman build
+      -t mariadb
+      -f mariadb/Dockerfile.reference
+      mariadb/
+    become: true
+    async: 300
+    poll: 0
+    register: mariadb
+
+  - name: build wordpress
+    command: >
+      podman build
+      -t wordpress
+      -f wordpress/Dockerfile.reference
+      wordpress/
+    become: true
+    async: 300
+    poll: 0
+    register: wordpress
+
+  - name: cleanup containers
+    command: podman rm -f {{ item }}
+    become: true
+    with_items:
+      - bigapp
+      - registry
+      - mariadb
+      - wordpress
+    ignore_errors: yes
+
+  - name: create pv dir
+    file:
+      state: directory
+      path: "{{home}}/workspace/pv"
+      owner: "{{account}}"
+      group: "{{account}}"
+    become: true
+    become_user: "{{account}}"
+
+  - name: create mysql pv dir
+    file:
+      state: directory
+      path: "{{home}}/workspace/pv/mysql"
+      owner: "27"
+      group: "{{account}}"
+    become: true
+    become_user: "{{account}}"
+
+  - name: create wp pv dir
+    file:
+      state: directory
+      path: "{{home}}/workspace/pv/uploads"
+      owner: "48"
+      group: "{{account}}"
+    become: true
+    become_user: "{{account}}"
+
+  - name: Check on mariadb build
+    async_status: jid={{ mariadb.ansible_job_id }}
+    register: mariadb_result
+    until: mariadb_result.finished
+    retries: 300
+    become: true
+
+  - name: Check on wordpress build
+    async_status: jid={{ wordpress.ansible_job_id }}
+    register: wordpress_result
+    until: wordpress_result.finished
+    retries: 300
+    become: true
+
+  - name: cleanup images
+    shell: podman images | grep -E '<none>' | awk '{print $3}' | xargs podman rmi -f -
+    become: true
+    ignore_errors: yes
+
+#TODO may want to tag and/or push the images to openshift
