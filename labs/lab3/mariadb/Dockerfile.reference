@@ -1,0 +1,19 @@
+FROM registry.access.redhat.com/ubi8:8.1-397
+LABEL maintainer="student@example.com"
+
+# Deps for mariadb
+RUN yum -y install \
+      mariadb-server openssl psmisc net-tools hostname procps && \
+    yum clean all
+
+# Add set up scripts
+ADD scripts /scripts
+RUN chmod 755 /scripts/* && \
+    MARIADB_DIRS="/var/lib/mysql /var/log/mariadb /run/mariadb" && \
+    chown -R mysql:0 ${MARIADB_DIRS} && \
+    chmod -R g=u ${MARIADB_DIRS}
+
+EXPOSE 3306
+VOLUME /var/lib/mysql
+USER 27
+CMD ["/bin/bash", "/scripts/start.sh"]

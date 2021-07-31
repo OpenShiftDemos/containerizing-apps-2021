@@ -1,0 +1,28 @@
+FROM registry.access.redhat.com/ubi8:8.1-397
+LABEL maintainer="student@example.com"
+
+RUN yum -y install \
+      httpd php php-mysqlnd php-gd openssl psmisc procps && \
+    yum clean all
+
+# running php-fpm directly (not using systemd) does
+# not create the socket directory
+RUN mkdir -p /run/php-fpm
+RUN chown 48:48 /run/php-fpm
+RUN chmod 0755 /run/php-fpm
+
+ADD scripts /scripts 
+RUN chmod 755 /scripts/*
+
+COPY latest.tar.gz /latest.tar.gz
+RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 && \
+    rm /latest.tar.gz && \
+    sed -i 's/^Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf && \
+    APACHE_DIRS="/var/www/html /usr/share/httpd /var/log/httpd /run/httpd" && \
+    chown -R apache:0 ${APACHE_DIRS} && \
+    chmod -R g=u ${APACHE_DIRS}
+
+EXPOSE 8080
+VOLUME /var/www/html/wp-content/uploads
+USER 48
+CMD ["/bin/bash", "/scripts/start.sh"]

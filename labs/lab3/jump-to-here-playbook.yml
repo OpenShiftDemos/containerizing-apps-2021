@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  become_method: sudo
+  tasks:
+  - name: build bigimg
+    command: podman build -t bigimg -f bigapp/Dockerfile /bigapp
+    become: true
+
+  - name: cleanup bigapp container
+    command: podman rm -f bigapp
+    become: true
+    ignore_errors: yes
+
+  - name: launch bigapp
+    command: podman run -P --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
+    become: true
