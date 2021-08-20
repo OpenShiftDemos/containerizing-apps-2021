@@ -1,14 +1,21 @@
 # Introduction
 
-Welcome to the Containerizing Applications lab! During this 0th lab we make sure everything is setup correctly.
+Welcome to the Containerizing Applications lab! During this 0th lab we make sure
+everything is setup correctly.
 
 Expected completion: 10-15 minutes
 
 ## Spin up an environment
 
-In an effort to make this lab repeatable, we offer it pre-configured in the [Red Hat Product Demo system](https://rhpds.redhat.com). For the easiest setup, please head there and launch the "Containerizing Applications: Existing and New" item in the "[Catalog](https://rhpds.redhat.com/catalog/explorer)." Proceed to [Connecting to your environment [RHPDS]](#connecting-to-your-environment-rhpds).
+In an effort to make this lab repeatable, we offer it pre-configured in the [Red
+Hat Product Demo system](https://rhpds.redhat.com). For the easiest setup,
+please head there and launch the "Containerizing Applications: Existing and New"
+item in the "[Catalog](https://rhpds.redhat.com/catalog/explorer)." Proceed to
+[Connecting to your environment [RHPDS]](#connecting-to-your-environment-rhpds).
 
-However, if you don't have access to the demo portal, you can also create a new RHEL8 Virtual Machine and run the [`configure-lab.sh`](./setup/configure-lab.sh) script in the setup directory in this repo.
+However, if you don't have access to the demo portal, you can also create a new
+RHEL8 Virtual Machine and run the [`configure-lab.sh`](./setup/configure-lab.sh)
+script in the setup directory in this repo.
 
 ```bash
 #TODO
@@ -18,19 +25,32 @@ $ chmod a+x configure-lab.sh
 $ ./configure-lab.sh
 ```
 
-You will also need an OpenShift instance later in the lab. If you don't have one, you can use the upstream version by heading to [OKD.io](https://www.okd.io/). Follow the instructions for whatever way is best for you. You should find instructions for Linux, Windows, and MacOS.
+You will also need an OpenShift instance later in the lab. If you don't have
+one, you can use the upstream version by heading to
+[OKD.io](https://www.okd.io/). Follow the instructions for whatever way is best
+for you. You should find instructions for Linux, Windows, and MacOS.
 
 Now proceed to [Getting Set Up](#getting-set-up)
 
 ## Connecting to your environment [RHPDS]
 
-Once you launch the demo, you should receive an email with the credentials to ssh in to the "ClientVM". Do not ssh to the OpenShift Cluster as that isn't used from the command line in this lab.
+Once you launch the demo, you should receive an email with the credentials to
+ssh in to the "ClientVM". Do not ssh to the OpenShift Cluster as that isn't used
+from the command line in this lab.
 
 ## Getting Set Up
 
-Since some of these labs will have long running processes, it is recommended to use something like `tmux` or `screen` in case you lose your connection at some point so you can reconnect. If you followed the steps above, you should already have `tmux`. `screen` is available in EPEL.
+Since some of these labs will have long running processes, it is recommended to
+use something like `tmux` or `screen` in case you lose your connection at some
+point so you can reconnect. If you followed the steps above, you should already
+have `tmux`. `screen` is available in EPEL.
 
-In case you get disconnected use `screen -x` or `tmux attach` to reattach once you reestablish ssh connectivity. If you are unfamiliar with screen, check out this [quick tutorial](https://www.mattcutts.com/blog/a-quick-tutorial-on-screen/). For tmux here is a [quick tutorial](https://fedoramagazine.org/use-tmux-more-powerful-terminal/).
+In case you get disconnected use `screen -x` or `tmux attach` to reattach once
+you reestablish ssh connectivity. If you are unfamiliar with screen, check out
+this [quick
+tutorial](https://www.mattcutts.com/blog/a-quick-tutorial-on-screen/). For tmux
+here is a [quick
+tutorial](https://fedoramagazine.org/use-tmux-more-powerful-terminal/).
 
 ## Lab Materials
 
@@ -41,9 +61,12 @@ $ cd ~/containerizing-applications
 $ git pull
 ```
 
-Now that we have all the content, we need to do a little bit of local configuration to support the dynamic nature of the lab.
+Now that we have all the content, we need to do a little bit of local
+configuration to support the dynamic nature of the lab.
 
-Next, take a look in `~/.bashrc` and make sure you have the following environment variables, even though they are (likely) not set correctly. You should have:
+Next, take a look in `~/.bashrc` and make sure you have the following
+environment variables, even though they are (likely) not set correctly. You
+should have:
 
  ```bash
 $ tail -9 ~/.bashrc
@@ -59,7 +82,10 @@ export OS_PASS='r3dh4t1!'
 ```
 
 ### Environment Variables [RHPDS]
-Now please replace `OS_API_URL` in `.bashrc` with the appropriate value. You should have it in your setup email (and don't forget the ports). The usernames and passwords should already be set correctly.  We will set `OS_REGISTRY_VALUE` a little later.
+Now please replace `OS_API_URL` in `.bashrc` with the appropriate value. You
+should have it in your setup email (and don't forget the ports). The usernames
+and passwords should already be set correctly.  We will set `OS_REGISTRY_VALUE`
+a little later.
 
 ```bash
 $ sed -i -e "s|OS_API_URL|<api value you got from the email>|g" ~/.bashrc
@@ -68,7 +94,9 @@ $ source ~/.bashrc
 
 ### Environment Variables [Custom]
 
-Now please replace the values in `.bashrc` with the appropriate values. You should have them from your OpenShift setup (and don't forget the ports). We will set `OS_REGISTRY_URL` a little later.
+Now please replace the values in `.bashrc` with the appropriate values. You
+should have them from your OpenShift setup (and don't forget the ports). We will
+set `OS_REGISTRY_URL` a little later.
 
 ```bash
 $ vi ~/.bashrc
@@ -77,7 +105,9 @@ $ source ~/.bashrc
 
 ### Acquire the appropriate version `oc`
 
-In order to interact with OpenShift from the command line we will need a tool called `oc`. We want to be sure we get the same version as the version of OpenShift we are using.
+In order to interact with OpenShift from the command line we will need a tool
+called `oc`. We want to be sure we get the same version as the version of
+OpenShift we are using.
 
 ```bash
 $ curl -L -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.3.1/openshift-client-linux-4.3.1.tar.gz
@@ -86,9 +116,12 @@ $ mkdir ~/bin && tar -xf openshift-client-linux-4.3.1.tar.gz -C ~/bin/
 
 ### Configure lab-user [Custom]
 
-If you are using the RHPDS instance, you can skip the following step as it will have been done for you. If not, you need to add our `lab-user` to OpenShift using the `htpasswd` Provider.
+If you are using the RHPDS instance, you can skip the following step as it will
+have been done for you. If not, you need to add our `lab-user` to OpenShift
+using the `htpasswd` Provider.
 
-We have provided a users.htpasswd file and the custom resource definition for it in the setup directory.
+We have provided a users.htpasswd file and the custom resource definition for it
+in the setup directory.
 
 ```bash
 $ oc login -u $OS_ADMIN_USER -p $OS_ADMIN_PASS $OS_API
@@ -103,7 +136,8 @@ $ oc create secret generic htpasswd-secret \
 
 ### OpenShift Registry
 
-Once you have the variables set, you can expose the OpenShift registry and add it to our variables:
+Once you have the variables set, you can expose the OpenShift registry and add
+it to our variables:
 
 ```bash
 $ oc login -u $OS_ADMIN_USER -p $OS_ADMIN_PASS $OS_API
@@ -127,6 +161,11 @@ $ oc policy add-role-to-user registry-editor $OS_USER
 
 ## OpenShift Container Platform
 
-What is OpenShift? OpenShift, which you may remember as a "[PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service)" to build applications on, has evolved into a complete container platform based on Kubernetes. With OpenShift, you can build from a platform, build from scratch, or anything else you can do in a container, and still get the complete life cycle automation you loved in the older versions.
+What is OpenShift? OpenShift, which you may remember as a
+"[PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service)" to build
+applications on, has evolved into a complete container platform based on
+Kubernetes. With OpenShift, you can build from a platform, build from scratch,
+or anything else you can do in a container, and still get the complete life
+cycle automation you loved in the older versions.
 
 You are now ready to move on to the [next lab](../lab1/chapter1.md).
