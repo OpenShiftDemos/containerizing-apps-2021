@@ -1,0 +1,9 @@
+---
+name: Bookbag Template
+modules:
+  activate:
+    - exercise0
+    - exercise1
+    - exercise2
+    - exercise3
+    - exercise4

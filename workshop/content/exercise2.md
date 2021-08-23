@@ -11,8 +11,7 @@ services. We will also observe several bad practices when composing Dockerfiles
 and explore how to avoid those mistakes. In lab 3 we will decompose the
 application into more manageable pieces.
 
-[comment]: <> (#TODO)
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
+This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
 otherwise instructed.
 
 Expected completion: 20-25 minutes

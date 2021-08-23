@@ -3,8 +3,7 @@
 In this lab we introduce how to orchestrate a multi-container application in
 OpenShift.
 
-[comment]: <> (#TODO)
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
+This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
 otherwise instructed.
 
 Expected completion: 40-60 minutes

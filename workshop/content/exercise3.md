@@ -4,8 +4,7 @@ In this lab you will deconstruct an application into microservices, creating a
 multi-container application. In this process we explore the challenges of
 networking, storage and configuration.
 
-[comment]: <> (#TODO)
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
+This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
 otherwise instructed.
 
 **_NOTE_**: In the steps below we use `vi` to edit files.  If you are

@@ -20,9 +20,7 @@ registries, and podman for verification/run. podman will transparently use the
 buildah and skopeo technologies for the user to build and push/pull from
 registries, all without the overhead of a separate daemon running all the time.
 
-[comment]: <> (#TODO)
-
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
+This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
 otherwise instructed.
 
 Expected completion: 15-20 minutes
@@ -37,7 +35,7 @@ Agenda:
 * Inspect a container
 * Build image registry
 
-Perform the following commands as `ec2-user` unless instructed otherwise.
+Perform the following commands as `lab-user` unless instructed otherwise.
 
 ## podman and docker
 
