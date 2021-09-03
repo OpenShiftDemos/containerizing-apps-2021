@@ -32,7 +32,7 @@ We have included a script for you that will set up some environment variables.
 Please execute the following:
 
 ```bash
-$ bash ~/support/lab0/setup/configure-lab.sh
+$ source ~/support/lab0/setup/configure-lab.sh
 ```
 
 That was easy!
