@@ -35,8 +35,6 @@ Agenda:
 * Inspect a container
 * Build image registry
 
-Perform the following commands as `lab-user` unless instructed otherwise.
-
 ## podman and docker
 
 Both podman and docker share configuration files so if you are using docker in
@@ -109,10 +107,10 @@ and then confirm functionality. To be clear, the filename is not required to be
 `Dockerfile` however, if you use that name or `Containerfile` `podman` will find
 it automatically.
 
-Change to `~/containerizing-applications/labs/lab1` and `cat` out the Dockerfile
+Change to `~/containerizing-applications/support/lab1` and `cat` out the Dockerfile
 
 ```bash
-$ cd ~/containerizing-applications/labs/lab1
+$ cd ~/containerizing-applications/support/lab1
 $ cat Dockerfile
 ```
 

@@ -2,68 +2,13 @@
 
 = Summit Lab 2021: Containerizing Applications
 
-. **[LAB 0](labs/lab0/chapter0.md)** Introduction / Setup
-. **[LAB 1](labs/lab1/chapter1.md)** Introducing podman
-. **[LAB 2](labs/lab2/chapter2.md)** Analyzing a monolithic application
-. **[LAB 3](labs/lab3/chapter3.md)** Deconstructing an application into microservices
-. **[LAB 4](labs/lab4/chapter4.md)** Orchestrated deployment of a decomposed application
+The Containerizing Applications lab provides an introduction to container basics
+with Podman, and then goes through the exercise of taking a standard LAMP server
+setup and breaking it down into a multi-container application, ultimately
+deployed on OpenShift.
 
-. Customize terminal settings in `envvars/gateway.sh` if desired.
-
-== Building the Bookbag Image
-
-. Create the bookbag BuildConfig and ImageStream:
-+
-[source,subs="{markup-in-source}"]
-----
-$ *oc process -f build-template.yaml | oc apply -f -*
-----
-
-. Build your image from local source or directly from Git source.
-+
-To build from local source (aka "binary build"):
-+
-[source,subs="{markup-in-source}"]
-----
-$ *oc start-build bookbag --follow --from-dir=.*
-----
-+
-Build your Bookbag Image from Git (make sure you have set `GIT_REPO` in your build template!):
-+
-[source,subs="{markup-in-source}"]
-----
-$ *oc start-build bookbag --follow*
-----
-
-== Test Deploy of the Bookbag image
-
-. Define a variables file, `workshop-vars.js`, to define variables for testing  your lab content:
-+
-----
-{
-    "guid": "abcde",
-    "example_var": 42,
-    "ssh_command": "ssh lab-user@bastion.abcde.example.com",
-    "ssh_password": "p4ssword!1",
-    "user": "lab-user",
-    "user_info_messages": "Example workshop messages:\nHello, World"
-}
-----
-
-. Process the deploy template with your `workshop-vars.json`:
-+
-[source,subs="{markup-in-source}"]
-----
-$ *oc process -f deploy-template.yaml -p WORKSHOP_VARS="$(cat workshop-vars.json)" | oc apply -f -*
-----
-
-. Get the Bookbag's Route:
-+
-[source,subs="{markup-in-source}"]
-----
-$ *oc get route bookbag*
-NAME     HOST/PORT                                  PATH  SERVICES  PORT       TERMINATION    WILDCARD
-bookbag  bookbag-bookbag-demo.apps.ocp.example.com        bookbag   10080-tcp  edge/Redirect  None
-----
-
-. Use the Route hostname to open the Bookbag page in your browser.
+. **[LAB 0](workshop/content/exercise0.md)** Introduction / Setup
+. **[LAB 1](workshop/content/exercise1.md)** Introducing podman
+. **[LAB 2](workshop/content/exercise2.md)** Analyzing a monolithic application
+. **[LAB 3](workshop/content/exercise3.md)** Deconstructing an application into microservices
+. **[LAB 4](workshop/content/exercise4.md)** Orchestrated deployment of a decomposed application
