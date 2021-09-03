@@ -9,6 +9,24 @@ Expected completion: 2 minutes
 There is a terminal window to the right of the lab steps. You will type all of
 your commands there unless asked to visit another website (for example, the
 OpenShift web console).
+
+## Copy & Paste
+You will frequently see commands in a block like the following:
+
+```bash
+$ echo 'hello, world!'
+```
+
+If you wish to copy paste, you'll need to:
+
+1. highlight the text with your mouse
+1. right-click and select `Copy`
+1. left-click in the terminal
+1. use `Control-Shift-V` or `Command-Shift-V`
+1. then hit `Enter`
+
+Try it with the `echo` command above!
+
 ## Set up environment variables
 We have included a script for you that will set up some environment variables.
 Please execute the following:
