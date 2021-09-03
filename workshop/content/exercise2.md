@@ -60,7 +60,7 @@ View the `Dockerfile` provided for `bigapp` which is not written with best
 practices in mind:
 
 ```bash
-$ cd ~/containerizing-applications/labs/lab2/bigapp/
+$ cd ~/containerizing-apps/support/lab2/bigapp
 $ cat Dockerfile
 ```
 

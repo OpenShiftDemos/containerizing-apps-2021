@@ -112,8 +112,8 @@ contents and the startup scripts.
 ```bash
 $ mkdir ~/workspace
 $ cd ~/workspace
-$ cp -R ~/containerizing-applications/labs/lab3/mariadb .
-$ cp -R ~/containerizing-applications/labs/lab3/wordpress .
+$ cp -R ~/containerizing-apps/labs/lab3/mariadb .
+$ cp -R ~/containerizing-apps/labs/lab3/wordpress .
 $ ls -lR mariadb
 $ ls -lR wordpress
 ```
