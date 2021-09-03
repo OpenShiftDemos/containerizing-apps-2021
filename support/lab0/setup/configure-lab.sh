@@ -1,12 +1,8 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-sudo subscription-manager register --auto-attach
-sudo subscription-manager repos \
-    --enable=ansible-2-for-rhel-8-x86_64-rpms
-sudo yum install -y ansible git
-#todo
-git clone https://gitlab.com/2020-summit-labs/containerizing-applications \
-    $DIR/containerizing-applications
-ansible-playbook -i "localhost," -K -c local \
-    $DIR/containerizing-applications/labs/lab0/setup/ansible/main.yml
+export GUID=$(echo $WORKSHOP_VARS | jq -r ".guid")
+export SSH_USER=$(echo $WORKSHOP_VARS | jq -r ".user")
+export SSH_PASSWORD=$(echo $WORKSHOP_VARS | jq -r ".password")
+export SSH_HOST=$(echo $WORKSHOP_VARS | jq -r ".ssh_host")
+export OS_API=$(echo $WORKSHOP_VARS | jq -r ".openshift_api_url")
+export OS_CONSOLE=$(echo $WORKSHOP_VARS | jq -r ".openshift_console_url")
