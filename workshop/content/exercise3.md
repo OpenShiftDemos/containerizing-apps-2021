@@ -112,8 +112,8 @@ contents and the startup scripts.
 ```bash
 $ mkdir ~/workspace
 $ cd ~/workspace
-$ cp -R ~/containerizing-apps/labs/lab3/mariadb .
-$ cp -R ~/containerizing-apps/labs/lab3/wordpress .
+$ cp -R ~/containerizing-apps/support/lab3/mariadb .
+$ cp -R ~/containerizing-apps/support/lab3/wordpress .
 $ ls -lR mariadb
 $ ls -lR wordpress
 ```
@@ -292,7 +292,7 @@ Now we are ready to build the images to test our Dockerfiles.
     ```
 
     **_NOTE:_**: the `curl` command returns an error but demonstrates
-              a response on the port.
+      a response on the port.
 
 1. Bring up the database (mariadb) for the wordpress instance.
 
