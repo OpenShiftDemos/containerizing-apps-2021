@@ -95,7 +95,8 @@ you are using in this lab guide will disconnect from the remote lab VM. It's up
 to you!
 
 ## Clone the lab content repository
-You will need to clone the lab content repository into the VM:
+Make sure you are logged into the lab VM, and then you will need to clone the
+lab content repository:
 
 ```bash
 $ git clone https://github.com/OpenShiftDemos/containerizing-apps-2021 containerizing-apps
