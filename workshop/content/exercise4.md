@@ -16,6 +16,12 @@ Then:
 $ ssh lab-user@$SSH_HOST
 ```
 
+Finally:
+
+```bash
+$ source ~/envfile
+```
+
 Expected completion: 40-60 minutes
 
 Let's start with a little more experimentation locally before looking to

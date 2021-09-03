@@ -24,6 +24,12 @@ Then:
 $ ssh lab-user@$SSH_HOST
 ```
 
+Finally:
+
+```bash
+$ source ~/envfile
+```
+
 Expected completion: 20-25 minutes
 
 Agenda:

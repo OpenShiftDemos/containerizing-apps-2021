@@ -17,6 +17,12 @@ Then:
 $ ssh lab-user@$SSH_HOST
 ```
 
+Finally:
+
+```bash
+$ source ~/envfile
+```
+
 **_NOTE_**: In the steps below we use `vi` to edit files.  If you are
 unfamiliar, this is a [good beginner's
 guide](https://www.howtogeek.com/102468/a-beginners-guide-to-editing-text-files-with-vi/).
