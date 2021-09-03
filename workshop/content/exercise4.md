@@ -3,8 +3,18 @@
 In this lab we introduce how to orchestrate a multi-container application in
 OpenShift.
 
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
 
 Expected completion: 40-60 minutes
 

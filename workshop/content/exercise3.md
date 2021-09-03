@@ -4,8 +4,18 @@ In this lab you will deconstruct an application into microservices, creating a
 multi-container application. In this process we explore the challenges of
 networking, storage and configuration.
 
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
 
 **_NOTE_**: In the steps below we use `vi` to edit files.  If you are
 unfamiliar, this is a [good beginner's

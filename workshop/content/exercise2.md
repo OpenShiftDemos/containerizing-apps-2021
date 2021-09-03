@@ -11,8 +11,18 @@ services. We will also observe several bad practices when composing Dockerfiles
 and explore how to avoid those mistakes. In lab 3 we will decompose the
 application into more manageable pieces.
 
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
 
 Expected completion: 20-25 minutes
 

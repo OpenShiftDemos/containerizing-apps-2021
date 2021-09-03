@@ -20,8 +20,18 @@ registries, and podman for verification/run. podman will transparently use the
 buildah and skopeo technologies for the user to build and push/pull from
 registries, all without the overhead of a separate daemon running all the time.
 
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `lab-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
 
 Expected completion: 15-20 minutes
 
