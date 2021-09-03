@@ -32,7 +32,8 @@ We have included a script for you that will set up some environment variables.
 Please execute the following:
 
 ```bash
-$ source ~/support/lab0/setup/configure-lab.sh
+$ bash ~/support/lab0/setup/configure-lab.sh
+$ source ~/envfile
 ```
 
 That was easy!
@@ -63,6 +64,29 @@ something like:
 ```
 [lab-user@studentvm 0 ~]$
 ```
+
+Great. Exit out for one more thing, and then you'll go right back.
+
+## Copy environment files to your lab system
+The above steps created an `envfile` that has important variables for your lab.
+However, as you'll be performing many of the steps inside the remote lab
+environment (remote to your lab terminal), you'll need to send those environment
+variables over there.
+
+```bash
+$ scp ~/envfile lab-user@$SSH_HOST:
+```
+
+You'll need to use the same password as before.
+
+OK, now you're ready to do your labs. Go ahead and SSH back into the lab system:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
+
+**_NOTE_:** If you want to generate an SSH key and copy it to the lab system to
+avoid using a password, that will work just fine.
 
 ## tmux and screen
 If you are comfortable using `tmux` or `screen`, you may wish to do so, as some
