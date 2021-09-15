@@ -146,6 +146,9 @@ Now connect to the port via curl:
 $ curl -L http://localhost:<port>/
 ```
 
+**_NOTE:_** If you see a `connection refused` message, it may be because the
+processes inside the container are still starting. Try again in a moment.
+
 ## Review Dockerfile practices
 
 So we have built a monolithic application using a somewhat complicated
