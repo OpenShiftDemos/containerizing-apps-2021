@@ -335,7 +335,7 @@ Now we are ready to build the images to test our Dockerfiles.
     ```
 
 **_NOTE:_** It might take a few moments for MariaDB to get started to the point
-*where it can receive connections from Apache.
+where it can receive connections from Apache.
 
 ## Use a Container Registry
 

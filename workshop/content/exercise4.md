@@ -299,8 +299,8 @@ spec:
 Save the file and exit the editor.
 
 **_Note:_** OpenShift provides an image for MariaDB as well as for several other
-software components. These come from the (Application
-Streams)[https://developers.redhat.com/blog/2018/11/15/rhel8-introducing-appstreams]
+software components. These come from the [Application
+Streams](https://developers.redhat.com/blog/2018/11/15/rhel8-introducing-appstreams)
 which may sound familiar to you if you have used the Software Collections
 Libraries (SCL) in the past. This image has specific environment variables it is
 configured to use, so this is why you are seeing different names than we used
@@ -526,8 +526,8 @@ from your lab machine.
 
 You can make the Wordpress service available outside the cluster by using a
 `Route`. `Route`s are a special kind of `Ingress` resource unique to OpenShift
-with their own properties. You can learn more about the differences in (this
-article)[https://cloud.redhat.com/blog/kubernetes-ingress-vs-openshift-route].
+with their own properties. You can learn more about the differences in [this
+article](https://cloud.redhat.com/blog/kubernetes-ingress-vs-openshift-route).
 `oc` provides a convenient way to create a `Route` from a `Service` using the
 `expose` subcommand:
 
