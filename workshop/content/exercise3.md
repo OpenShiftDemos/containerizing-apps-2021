@@ -4,9 +4,24 @@ In this lab you will deconstruct an application into microservices, creating a
 multi-container application. In this process we explore the challenges of
 networking, storage and configuration.
 
-[comment]: <> (#TODO)
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
+
+Finally:
+
+```bash
+$ source ~/envfile
+```
 
 **_NOTE_**: In the steps below we use `vi` to edit files.  If you are
 unfamiliar, this is a [good beginner's
@@ -103,8 +118,8 @@ contents and the startup scripts.
 ```bash
 $ mkdir ~/workspace
 $ cd ~/workspace
-$ cp -R ~/containerizing-applications/labs/lab3/mariadb .
-$ cp -R ~/containerizing-applications/labs/lab3/wordpress .
+$ cp -R ~/containerizing-apps/support/lab3/mariadb .
+$ cp -R ~/containerizing-apps/support/lab3/wordpress .
 $ ls -lR mariadb
 $ ls -lR wordpress
 ```
@@ -283,7 +298,7 @@ Now we are ready to build the images to test our Dockerfiles.
     ```
 
     **_NOTE:_**: the `curl` command returns an error but demonstrates
-              a response on the port.
+      a response on the port.
 
 1. Bring up the database (mariadb) for the wordpress instance.
 
@@ -356,9 +371,11 @@ labs) must exist.  You will use the `oc` commandline tool to interact with the
 OpenShift environment for this step, but we will return to explain `oc` in
 greater detail in the next lab.
 
+**_NOTE:_** Your password for OpenShift is the same password you used to login
+to the Summit web interface.
+
 ```bash
-$ oc login -u $OS_USER -p $OS_PASS $OS_API
-$ oc new-project $OS_USER-container-lab
+$ oc login -u $OS_USER $OS_API
 ```
 
 ### Tag images for registry
@@ -388,8 +405,7 @@ built into the OpenShift registry:
 
 ```bash
 $ sudo podman images
-$ sudo podman tag localhost/mariadb $OS_REGISTRY/$OS_USER-container-lab/mariadb
-$ sudo podman tag localhost/wordpress $OS_REGISTRY/$OS_USER-container-lab/wordpress
+$ sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
 $ sudo podman images
 ```
 
@@ -420,14 +436,13 @@ Push the images:
 
 ```bash
 $ sudo podman images
-$ sudo podman push --tls-verify=false $OS_REGISTRY/$OS_USER-container-lab/mariadb
-$ sudo podman push --tls-verify=false $OS_REGISTRY/$OS_USER-container-lab/wordpress
+$ sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
 ```
 
 OpenShift does some cool things for you when you push images into its registry. Try the following:
 
 ```bash
-$ oc describe imagestream wordpress -n $OS_USER-container-lab
+$ oc describe imagestream wordpress -n $(oc project -q)
 ```
 
 An `ImageStream` is an OpenShift object that keeps track of changes to a

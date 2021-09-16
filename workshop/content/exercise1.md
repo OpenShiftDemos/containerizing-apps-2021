@@ -20,10 +20,24 @@ registries, and podman for verification/run. podman will transparently use the
 buildah and skopeo technologies for the user to build and push/pull from
 registries, all without the overhead of a separate daemon running all the time.
 
-[comment]: <> (#TODO)
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
 
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
-otherwise instructed.
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
+
+Finally:
+
+```bash
+$ source ~/envfile
+```
 
 Expected completion: 15-20 minutes
 
@@ -36,8 +50,6 @@ Agenda:
 * Launch a container
 * Inspect a container
 * Build image registry
-
-Perform the following commands as `ec2-user` unless instructed otherwise.
 
 ## podman and docker
 
@@ -111,10 +123,10 @@ and then confirm functionality. To be clear, the filename is not required to be
 `Dockerfile` however, if you use that name or `Containerfile` `podman` will find
 it automatically.
 
-Change to `~/containerizing-applications/labs/lab1` and `cat` out the Dockerfile
+Change to `~/containerizing-apps/support/lab1` and `cat` out the Dockerfile
 
 ```bash
-$ cd ~/containerizing-applications/labs/lab1
+$ cd ~/containerizing-apps/support/lab1
 $ cat Dockerfile
 ```
 

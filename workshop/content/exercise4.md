@@ -3,9 +3,24 @@
 In this lab we introduce how to orchestrate a multi-container application in
 OpenShift.
 
-[comment]: <> (#TODO)
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
+
+Finally:
+
+```bash
+$ source ~/envfile
+```
 
 Expected completion: 40-60 minutes
 
@@ -95,9 +110,11 @@ the service remains available"? Enter Kubernetes/OpenShift.
 
 Login to OpenShift & connect to your project:
 
+**_NOTE:_** Your password for OpenShift is the same password you used to login
+to the Summit web interface.
+
 ```bash
-$ oc login -u $OS_USER -p $OS_PASS
-$ oc project $OS_USER-container-lab
+$ oc login -u $OS_USER
 ```
 
 You are now logged in to OpenShift and are using your own project. You can also
@@ -122,7 +139,8 @@ and then give both the user and group write access on the `/run/php-fpm/`
 directory.
 
 **_NOTE_**: The `Dockerfile` referenced is the one in the `lab3` folder's
-`wordpress' folder.
+`wordpress` folder. You may wish to change directory to
+`~/containerizing-apps/support/lab3`
 
 ```bash
 $ vi wordpress/Dockerfile
@@ -151,22 +169,25 @@ container images are immutable) and push it to the OpenShift Registry.
 
 ```bash
   $ sudo podman build -t wordpress wordpress/
-  $ sudo podman tag localhost/wordpress $OS_REGISTRY/$OS_USER-container-lab/wordpress
+  $ sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
   $ sudo podman login --tls-verify=false \
     -u $OS_USER \
     -p $(oc whoami -t) \
     $OS_REGISTRY
-  $ sudo podman push --tls-verify=false $OS_REGISTRY/$OS_USER-container-lab/wordpress
+  $ sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
 ```
 
 You might notice that this push was a lot faster. This is because the registry
-is smart and understands that the layers being pushed are identical, so it tells
-Podman it can be skipped. Since we only changed a few things in the
-`Dockerfile`, most of the layers are the same.
+is smart and understands that some of the layers being pushed are identical, so
+it tells Podman the dupes can be skipped. Since we only changed a few things in
+the `Dockerfile`, most of the layers are the same.
 
 ## Orphaned images
 
-When you run the tag command above, you are telling Podman to replace the tag that you previously pointed at `localhost/wordpress`. When you don't specify the specific tag, the `build` command will automatically use `:latest`. Go ahead and look at the images:
+When you run the tag command above, you are telling Podman to replace the tag
+that you previously pointed at `localhost/wordpress`. When you don't specify the
+specific tag, the `build` command will automatically use `:latest`. Go ahead and
+look at the images:
 
 ```bash
 $ sudo podman images
@@ -174,10 +195,10 @@ $ sudo podman images
 
 You should see an image whose repository is `<none>`. This is because
 `localhost/wordpress:latest` was rebuilt and got a new image ID/SHA, and then
-you updated the `$OS_REGISTRY/$OS_USER-container-lab/wordpress:latest` tag to
-point at the new build of Wordpress. This effectively orphaned the old image.
-When doing a lot of local container building and tagging with Podman, take care
-to occasionally clean up after yourself.
+you updated the `..../wordpress:latest` tag to point at the new build of
+Wordpress. This effectively orphaned the old image.  When doing a lot of local
+container building and tagging with Podman, take care to occasionally clean up
+after yourself.
 
 We'll ignore this for now, and know that OpenShift has various cleaning routines
 to take care of these things for you.
@@ -275,6 +296,8 @@ spec:
           value: mydb
 ```
 
+Save the file and exit the editor.
+
 **_Note:_** OpenShift provides an image for MariaDB as well as for several other
 software components. These come from the (Application
 Streams)[https://developers.redhat.com/blog/2018/11/15/rhel8-introducing-appstreams]
@@ -285,10 +308,11 @@ when we built our own Maria image.
 
 Our Wordpress container is much less complex, so let's do that pod next.
 
-**_Note_:** **YOU WILL NEED TO CHANGE `YOUR_OS_USER` TO HAVE THE VALUE OF YOUR
-OPENSHIFT USERNAME**. For example, `user1`, if that's what your user is. If you
-do not correctly substitute your username, you will notice that your Wordpress
-container will fail to run due to the image not being found.
+**_Note_:** **YOU WILL NEED TO CHANGE `YOUR_PROJECT` TO HAVE THE VALUE OF YOUR
+OPENSHIFT PROJECT**. If you execute `oc project -q` you will see what your
+project name will look like. It should be something like `user-john-domain.com`.
+If you do not correctly substitute your username, you will notice that your
+Wordpress container will fail to run due to the image not being found.
 
 ```bash
 $ mkdir -p ~/workspace/wordpress/openshift
@@ -305,7 +329,7 @@ metadata:
 spec:
   containers:
   - name: wordpress
-    image: image-registry.openshift-image-registry.svc:5000/YOUR_OS_USER-container-lab/wordpress
+    image: image-registry.openshift-image-registry.svc:5000/YOUR_PROJECT/wordpress
     ports:
     - containerPort: 8080
     env:
@@ -362,6 +386,9 @@ $ oc describe pod wordpress
 Ok, now let's kill them off so we can introduce the services that will let them
 more dynamically find each other.
 
+**_NOTE_:** It is important that you delete the pods here because of the way
+environment variables are injected into containers in Kubernetes.
+
 ```bash
 $ oc delete pod/mariadb pod/wordpress
 ```
@@ -379,7 +406,7 @@ interchangeably depending on the kind of information you want.
 ## Service Creation
 
 Now we want to create Kubernetes Services for our pods so that OpenShift can
-introduce a layer of indirection between the pods.
+introduce a layer of abstraction between the pods.
 
 Let's start with mariadb. Open up a service file:
 
@@ -442,16 +469,16 @@ called "db" and a `selector` in the `mariadb-service.yaml` (although, an
 even better name might be `db-service.yaml`) called `db`. Feel free to
 experiment with that at the end of this lab if you have time.
 
-Now let's get things going. Start mariadb:
+Now let's get things going. First, create the services:
 
 ```bash
-$ oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml -f ~/workspace/mariadb/openshift/mariadb-service.yaml
+$ oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml -f ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
-Now let's start wordpress.
+Then, recreate the pods:
 
 ```bash
-$ oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml -f ~/workspace/wordpress/openshift/wordpress-service.yaml
+$ oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml -f ~/workspace/wordpress/openshift/wordpress-pod.yaml 
 ```
 
 OK, now let's make sure everything came up correctly:
@@ -494,9 +521,15 @@ mariadb     10.128.2.31:3306   2m12s
 wordpress   10.128.2.32:8080   115s
 ```
 
-Those IPs are inside OpenShift's software-defined network and are not accessible from your lab machine.
+Those IPs are inside OpenShift's software-defined network and are not accessible
+from your lab machine.
 
-You can make the Wordpress service available outside the cluster by using a `Route`. `Route`s are a special kind of `Ingress` resource unique to OpenShift with their own properties. You can learn more about the differences in (this article)[https://cloud.redhat.com/blog/kubernetes-ingress-vs-openshift-route]. `oc` provides a convenient way to create a `Route` from a `Service` using the `expose` subcommand:
+You can make the Wordpress service available outside the cluster by using a
+`Route`. `Route`s are a special kind of `Ingress` resource unique to OpenShift
+with their own properties. You can learn more about the differences in (this
+article)[https://cloud.redhat.com/blog/kubernetes-ingress-vs-openshift-route].
+`oc` provides a convenient way to create a `Route` from a `Service` using the
+`expose` subcommand:
 
 ```bash
 $ oc expose svc/wordpress

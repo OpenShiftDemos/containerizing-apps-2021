@@ -11,9 +11,24 @@ services. We will also observe several bad practices when composing Dockerfiles
 and explore how to avoid those mistakes. In lab 3 we will decompose the
 application into more manageable pieces.
 
-[comment]: <> (#TODO)
-This lab should be performed on **YOUR ASSIGNED AWS VM** as `ec2-user` unless
-otherwise instructed.
+You'll need to perform these steps inside the virtual machine. If you forgot how
+to connect to it:
+
+```bash
+$ echo $SSH_PASSWORD
+```
+
+Then:
+
+```bash
+$ ssh lab-user@$SSH_HOST
+```
+
+Finally:
+
+```bash
+$ source ~/envfile
+```
 
 Expected completion: 20-25 minutes
 
@@ -51,7 +66,7 @@ View the `Dockerfile` provided for `bigapp` which is not written with best
 practices in mind:
 
 ```bash
-$ cd ~/containerizing-applications/labs/lab2/bigapp/
+$ cd ~/containerizing-apps/support/lab2/bigapp
 $ cat Dockerfile
 ```
 
@@ -130,6 +145,9 @@ Now connect to the port via curl:
 ```bash
 $ curl -L http://localhost:<port>/
 ```
+
+**_NOTE:_** If you see a `connection refused` message, it may be because the
+processes inside the container are still starting. Try again in a moment.
 
 ## Review Dockerfile practices
 

@@ -1,0 +1,14 @@
+:markup-in-source: verbatim,attributes,quotes
+
+= Summit Lab 2021: Containerizing Applications
+
+The Containerizing Applications lab provides an introduction to container basics
+with Podman, and then goes through the exercise of taking a standard LAMP server
+setup and breaking it down into a multi-container application, ultimately
+deployed on OpenShift.
+
+. **[LAB 0](workshop/content/exercise0.md)** Introduction / Setup
+. **[LAB 1](workshop/content/exercise1.md)** Introducing podman
+. **[LAB 2](workshop/content/exercise2.md)** Analyzing a monolithic application
+. **[LAB 3](workshop/content/exercise3.md)** Deconstructing an application into microservices
+. **[LAB 4](workshop/content/exercise4.md)** Orchestrated deployment of a decomposed application
