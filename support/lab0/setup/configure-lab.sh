@@ -20,4 +20,7 @@ echo "export OS_API=$OS_API" >> ~/envfile
 export OS_CONSOLE=$(echo $WORKSHOP_VARS | jq -r ".openshift_console_url")
 echo "export OS_CONSOLE=$OS_CONSOLE" >> ~/envfile
 
-echo "export OS_REGISTRY=https://default-route-openshift-image-registry.${OS_CONSOLE#[[:alpha:]]*.}" >> ~/envfile
+echo "export OS_REGISTRY=default-route-openshift-image-registry.${OS_CONSOLE#[[:alpha:]]*.}" >> ~/envfile
+
+export OS_USER=$(echo $WORKSHOP_VARS | jq -r ".openshift_username")
+echo "export OS_USER=$OS_USER" >> ~/envfile
