@@ -405,7 +405,6 @@ built into the OpenShift registry:
 
 ```bash
 $ sudo podman images
-$ sudo podman tag localhost/mariadb $OS_REGISTRY/$(oc project -q)/mariadb
 $ sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
 $ sudo podman images
 ```
@@ -437,7 +436,6 @@ Push the images:
 
 ```bash
 $ sudo podman images
-$ sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/mariadb
 $ sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
 ```
 
