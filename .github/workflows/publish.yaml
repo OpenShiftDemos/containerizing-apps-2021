@@ -1,0 +1,49 @@
+---
+name: publish
+on:
+  push:
+    branches:
+    - 'main'
+    tags:
+    - 'v[0-9]*'
+jobs:
+  publish:
+    env:
+      IMAGE_NAME: containerizing-apps-2021
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+
+    - name: Set image tags
+      id: image_tags
+      run: |
+        TAG=${GITHUB_REF#refs/tags/}
+        IMAGE_TAGS=(
+          '${{ secrets.REGISTRY_URI }}/${{ secrets.REGISTRY_REPOSITORY }}/${{ env.IMAGE_NAME }}:latest'
+        )
+
+        if [[ "${TAG}" == v* ]]; then
+          IMAGE_TAGS+=(
+            "${{ secrets.REGISTRY_URI }}/${{ secrets.REGISTRY_REPOSITORY }}/${{ env.IMAGE_NAME }}:${TAG}"
+          )
+        fi
+        # Set IMAGE_TAGS output for use in next step
+        ( IFS=$','; echo "::set-output name=IMAGE_TAGS::${IMAGE_TAGS[*]}" )
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Image Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.REGISTRY_URI }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Build and publish image to Quay
+      uses: docker/build-push-action@v2
+      with:
+        file: Dockerfile
+        push: true
+        tags: ${{ steps.image_tags.outputs.IMAGE_TAGS }}
