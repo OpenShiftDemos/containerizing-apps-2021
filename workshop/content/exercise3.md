@@ -430,6 +430,34 @@ $ sudo podman login --tls-verify=false \
   $OS_REGISTRY
 ```
 
+### Check your project
+Under the covers, this cluster has an Operator that will automatically create a
+default project for your user after you first login. This is not instantaneous,
+so, before continuing, make sure that the default project exists. Execute the
+following:
+
+```
+$ oc project
+```
+
+And you should see that you are using a project with the name `user-YOUR-LOGIN`.
+If you do not see this, go ahead and do:
+
+```
+$ oc get project
+```
+
+And the:
+
+```
+$ oc project XXX
+```
+
+Where `XXX` is the name of the project you saw in the output of the `get`
+command.
+
+If your `get` command returns no projects, wait a few moments and try again.
+
 ### Push images to registry
 
 Push the images:
