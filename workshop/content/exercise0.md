@@ -65,7 +65,15 @@ something like:
 [lab-user@studentvm 0 ~]$
 ```
 
-Great. Exit out for one more thing, and then you'll go right back.
+Great - you're in! 
+
+**WARNING**
+
+**MAKE SURE TO EXIT** for one more thing, and then you'll go right back.
+
+```
+[lab-user@studentvm 0 ~]$ exit
+```
 
 ## Copy environment files to your lab system
 The above steps created an `envfile` that has important variables for your lab.
