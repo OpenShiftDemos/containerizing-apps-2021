@@ -7,19 +7,19 @@ You'll need to perform these steps inside the virtual machine. If you forgot how
 to connect to it:
 
 ```bash
-$ echo $SSH_PASSWORD
+echo $SSH_PASSWORD
 ```
 
 Then:
 
 ```bash
-$ ssh lab-user@$SSH_HOST
+ssh lab-user@$SSH_HOST
 ```
 
 Finally:
 
 ```bash
-$ source ~/envfile
+source ~/envfile
 ```
 
 Expected completion: 40-60 minutes
@@ -32,22 +32,22 @@ worry about uptime.
 So, let's see what will happen. Launch the site:
 
 ```bash
-$ sudo podman run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
-$ sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+sudo podman run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
+sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
 ```
 
 Use `curl` again to validate that the site is working:
 
 ```bash
-$ curl -L http://localhost:8080
+curl -L http://localhost:8080
 ```
 
 As you learned before, you can confirm the port that your server is running on
 by executing:
 
 ```bash
-$ sudo podman ps
-$ sudo podman port wordpress
+sudo podman ps
+sudo podman port wordpress
 8080/tcp -> 0.0.0.0:8080
 ```
 
@@ -56,15 +56,15 @@ for various experiments. Then, let's see what happens when we kick over the
 database:
 
 ```bash
-$ OLD_CONTAINER_ID=$(sudo podman inspect --format '{{ .ID }}' mariadb)
-$ sudo podman stop mariadb
+OLD_CONTAINER_ID=$(sudo podman inspect --format '{{ .ID }}' mariadb)
+sudo podman stop mariadb
 ```
 
 Take a look at the site in your web browser or using curl now. And, imagine
 explosions! (*making sound effects will be much appreciated by your lab mates.*)
 
 ```bash
-$ curl -L http://localhost:8080
+curl -L http://localhost:8080
 ```
 
 While containers are typically ephemeral, because we have attached a volume from
@@ -73,13 +73,13 @@ deletion. This allows you to bring the database back without having lost any
 data:
 
 ```bash
-$ sudo podman start mariadb
+sudo podman start mariadb
 ```
 
 Now, let's compare the old container id and the new one:
 ```bash
-$ NEW_CONTAINER_ID=$(sudo podman inspect --format '{{ .ID }}' mariadb)
-$ echo -e "$OLD_CONTAINER_ID\n$NEW_CONTAINER_ID"
+NEW_CONTAINER_ID=$(sudo podman inspect --format '{{ .ID }}' mariadb)
+echo -e "$OLD_CONTAINER_ID\n$NEW_CONTAINER_ID"
 ```
 
 The container IDs are exactly the same. This is because you simply stopped the
@@ -91,7 +91,7 @@ and a database running, but a whole lot faster to create, stop, and restart. Let
 take a look at the site now:
 
 ```bash
-$ curl -L http://localhost:8080
+curl -L http://localhost:8080
 ```
 
 It's back!
@@ -99,7 +99,7 @@ It's back!
 Finally, let's kill off these containers to prepare for the next section.
 
 ```bash
-$ sudo podman rm -f mariadb wordpress
+sudo podman rm -f mariadb wordpress
 ```
 
 Starting and stopping is definitely easy, and fast. However, it is still pretty
@@ -114,7 +114,7 @@ Login to OpenShift & connect to your project:
 to the Summit web interface.
 
 ```bash
-$ oc login -u $OS_USER
+oc login -u $OS_USER
 ```
 
 You are now logged in to OpenShift and are using your own project. You can also
@@ -143,7 +143,7 @@ directory.
 `~/containerizing-apps/support/lab3`
 
 ```bash
-$ vi wordpress/Dockerfile
+vi wordpress/Dockerfile
 ```
 
 modify these two lines:
@@ -190,7 +190,7 @@ specific tag, the `build` command will automatically use `:latest`. Go ahead and
 look at the images:
 
 ```bash
-$ sudo podman images
+sudo podman images
 ```
 
 You should see an image whose repository is `<none>`. This is because
@@ -218,8 +218,8 @@ then replacing that with a populated element.
 Let's make a pod for mariadb. Open a file called mariadb-pod.yaml.
 
 ```bash
-$ mkdir -p ~/workspace/mariadb/openshift
-$ vi ~/workspace/mariadb/openshift/mariadb-pod.yaml
+mkdir -p ~/workspace/mariadb/openshift
+vi ~/workspace/mariadb/openshift/mariadb-pod.yaml
 ```
 
 In that file, let's put in the pod identification information:
@@ -315,8 +315,8 @@ If you do not correctly substitute your username, you will notice that your
 Wordpress container will fail to run due to the image not being found.
 
 ```bash
-$ mkdir -p ~/workspace/wordpress/openshift
-$ vi ~/workspace/wordpress/openshift/wordpress-pod.yaml
+mkdir -p ~/workspace/wordpress/openshift
+vi ~/workspace/wordpress/openshift/wordpress-pod.yaml
 ```
 
 ```yaml
@@ -354,8 +354,8 @@ Where `<operation>` is something like `create`, `get`, `remove`, etc. and `kind`
 is the `kind` from the pod files.
 
 ```bash
-$ oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
-$ oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
 ```
 
 Now, I know i just said, `kind` is a parameter, but, as this is a create
@@ -364,7 +364,7 @@ statement, it looks in the `-f` file for the `kind`.
 Ok, let's see if they came up:
 
 ```bash
-$ oc get pods
+oc get pods
 ```
 
 Which should output two pods, one called `mariadb` and one called
@@ -376,11 +376,11 @@ can check out the logs from the OpenShift containers in multiple ways. Here are
 a couple of options:
 
 ```bash
-$ oc logs mariadb
-$ oc describe pod mariadb
+oc logs mariadb
+oc describe pod mariadb
 
-$ oc logs wordpress
-$ oc describe pod wordpress
+oc logs wordpress
+oc describe pod wordpress
 ```
 
 Ok, now let's kill them off so we can introduce the services that will let them
@@ -390,13 +390,13 @@ more dynamically find each other.
 environment variables are injected into containers in Kubernetes.
 
 ```bash
-$ oc delete pod/mariadb pod/wordpress
+oc delete pod/mariadb pod/wordpress
 ```
 
 Verify they are terminating or are gone:
 
 ```bash
-$ oc get pods
+oc get pods
 ```
 
 **_NOTE_:** you used the "singular" form here on the `kind`, which, for delete,
@@ -411,7 +411,7 @@ introduce a layer of abstraction between the pods.
 Let's start with mariadb. Open up a service file:
 
 ```bash
-$ vi ~/workspace/mariadb/openshift/mariadb-service.yaml
+vi ~/workspace/mariadb/openshift/mariadb-service.yaml
 ```
 
 and insert the following content:
@@ -437,7 +437,7 @@ need to make sure the `kind` is of type `Service` and that the
 OK, now let's move on to the Wordpress service. Open up a new service file:
 
 ```bash
-$ vi ~/workspace/wordpress/openshift/wordpress-service.yaml
+vi ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
 and insert:
@@ -472,20 +472,20 @@ experiment with that at the end of this lab if you have time.
 Now let's get things going. First, create the services:
 
 ```bash
-$ oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml -f ~/workspace/wordpress/openshift/wordpress-service.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml -f ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
 Then, recreate the pods:
 
 ```bash
-$ oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml -f ~/workspace/wordpress/openshift/wordpress-pod.yaml 
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml -f ~/workspace/wordpress/openshift/wordpress-pod.yaml 
 ```
 
 OK, now let's make sure everything came up correctly:
 
 ```bash
-$ oc get pods
-$ oc get services
+oc get pods
+oc get services
 ```
 
 **_NOTE_:** these may take a while to get to a `RUNNING` state as it pulls
@@ -494,14 +494,14 @@ the image from the registry, spins up the containers, etc.
 Eventually, you should see:
 
 ```bash
-$ oc get pods
+oc get pods
 NAME        READY     STATUS    RESTARTS   AGE
 mariadb     1/1       Running   0          45s
 wordpress   1/1       Running   0          42s
 ```
 
 ```bash
-$ oc get services
+oc get services
 NAME        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 mariadb     ClusterIP   172.30.xx.xx    <none>        3306/TCP   1m
 wordpress   ClusterIP   172.30.xx.xx    <none>        8080/TCP   1m
@@ -510,7 +510,7 @@ wordpress   ClusterIP   172.30.xx.xx    <none>        8080/TCP   1m
 You can also see that the services have found pods by looking at the `Endpoint` lists:
 
 ```bash
-$ oc get endpoints
+oc get endpoints
 ```
 
 Which will show something like:
@@ -532,14 +532,14 @@ article](https://cloud.redhat.com/blog/kubernetes-ingress-vs-openshift-route).
 `expose` subcommand:
 
 ```bash
-$ oc expose svc/wordpress
+oc expose svc/wordpress
 ```
 
 And you should be able to see the service's accessible URL by viewing the
 routes:
 
 ```bash
-$ oc get routes
+oc get routes
 NAME        HOST/PORT                                                                     PATH   SERVICES    PORT   TERMINATION   WILDCARD
 wordpress   wordpress-<YOUR_USER>-container-lab.<CLUSTER_DEFAULT>          wordpress   8080                 None
 ```
@@ -547,7 +547,7 @@ wordpress   wordpress-<YOUR_USER>-container-lab.<CLUSTER_DEFAULT>          wordp
 Check and make sure you can access the wordpress service through the route:
 
 ```bash
-$ curl -L http://wordpress-<YOUR_USER>-container-lab.apps.<YOUR HOSTNAME>
+curl -L http://wordpress-<YOUR_USER>-container-lab.apps.<YOUR HOSTNAME>
 ```
 
 OR open the URL in a browser to view the UI.
