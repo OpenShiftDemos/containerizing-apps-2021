@@ -277,7 +277,7 @@ Now we are ready to build the images to test our Dockerfiles.
 
     ```bash
     $ ls -lZd ~/workspace/pv/uploads
-    $ sudo podman run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
+    $ sudo podman run -d -p 8080:80 -p 8306:3306 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
     ```
     Note: See the difference in SELinux context after running with a volume & :z.
     ```bash
@@ -330,7 +330,7 @@ Now we are ready to build the images to test our Dockerfiles.
     $ sudo podman ps
     $ sudo podman exec mariadb curl localhost:3306 # gives an error but you can tell mariadb answered
     $ sudo podman exec mariadb mysql -u user --password=mypassword -e 'show databases'
-    $ curl localhost:3306 #as you can see the db is not generally visible
+    $ curl localhost:8306 #as you can see the db is not generally visible
     $ curl -L http://localhost:8080 #and now wp is happier!
     ```
 
