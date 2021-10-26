@@ -378,6 +378,42 @@ to the Summit web interface.
 oc login -u $OS_USER $OS_API
 ```
 
+Wait 30 seconds before continuing. If you don't have a clock handy, you can use
+the computer to wait for you:
+
+```bash
+sleep 30
+```
+
+### Check your project
+Under the covers, this cluster has an Operator that will automatically create a
+default project for your user after you first login. This is not instantaneous,
+so, before continuing, make sure that the default project exists. Execute the
+following:
+
+```
+oc project
+```
+
+And you should see that you are using a project with the name `user-YOUR-LOGIN`.
+If you do not see this, go ahead and do:
+
+```
+oc get project
+```
+
+And the:
+
+```
+oc project XXX
+```
+
+Where `XXX` is the name of the project you saw in the output of the `get`
+command.
+
+If your `get` command returns no projects, wait a few moments and try again.
+
+
 ### Tag images for registry
 
 [Tagging](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index#proc_tagging-images_assembly_working-with-container-images)
@@ -429,34 +465,6 @@ sudo podman login --tls-verify=false \
   -p $(oc whoami -t) \
   $OS_REGISTRY
 ```
-
-### Check your project
-Under the covers, this cluster has an Operator that will automatically create a
-default project for your user after you first login. This is not instantaneous,
-so, before continuing, make sure that the default project exists. Execute the
-following:
-
-```
-oc project
-```
-
-And you should see that you are using a project with the name `user-YOUR-LOGIN`.
-If you do not see this, go ahead and do:
-
-```
-oc get project
-```
-
-And the:
-
-```
-oc project XXX
-```
-
-Where `XXX` is the name of the project you saw in the output of the `get`
-command.
-
-If your `get` command returns no projects, wait a few moments and try again.
 
 ### Push images to registry
 
