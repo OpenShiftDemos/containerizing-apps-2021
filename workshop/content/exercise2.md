@@ -15,19 +15,19 @@ You'll need to perform these steps inside the virtual machine. If you forgot how
 to connect to it:
 
 ```bash
-$ echo $SSH_PASSWORD
+echo $SSH_PASSWORD
 ```
 
 Then:
 
 ```bash
-$ ssh lab-user@$SSH_HOST
+ssh lab-user@$SSH_HOST
 ```
 
 Finally:
 
 ```bash
-$ source ~/envfile
+source ~/envfile
 ```
 
 Expected completion: 20-25 minutes
@@ -66,8 +66,8 @@ View the `Dockerfile` provided for `bigapp` which is not written with best
 practices in mind:
 
 ```bash
-$ cd ~/containerizing-apps/support/lab2/bigapp
-$ cat Dockerfile
+cd ~/containerizing-apps/support/lab2/bigapp
+cat Dockerfile
 ```
 
 Build the podman image for this by executing the following command. This can
@@ -76,7 +76,7 @@ Dockerfile Practices](#review-dockerfile-practices) section at the end of this
 lab chapter.
 
 ```bash
-$ sudo podman build -t bigimg .
+sudo podman build -t bigimg .
 ```
 
 ## Run Container Based on podman Image
@@ -85,8 +85,8 @@ To run the podman container based on the image we just built use the following
 command:
 
 ```bash
-$ sudo podman run -P --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
-$ sudo podman ps
+sudo podman run -P --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
+sudo podman ps
 ```
 
 Take a look at some of the arguments we are passing to podman. With `-P` we are
@@ -109,7 +109,7 @@ to see the output. To follow or "tail" the logs use the `-f` option.
 container id for most `podman` (or `docker`) commands.
 
 ```bash
-$ sudo podman logs -f bigapp
+sudo podman logs -f bigapp
 ```
 
 **_NOTE:_** When you are finished inspecting the log, just CTRL-C out.
@@ -119,7 +119,7 @@ can enter into the namespace of the container to inspect things more closely.
 The easiest way to do this is to use `podman exec`. Try it out:
 
 ```bash
-$ sudo podman exec -it bigapp /bin/bash
+sudo podman exec -it bigapp /bin/bash
 [CONTAINER_NAMESPACE]# pstree
 [CONTAINER_NAMESPACE]# cat /var/www/html/wp-config.php | grep '=='
 [CONTAINER_NAMESPACE]# tail /var/log/httpd/access_log /var/log/httpd/error_log /var/log/mariadb/mariadb.log
@@ -138,12 +138,12 @@ Press `CTRL+d` or type `exit` to leave the container shell.
 First detect the host port number that is is mapped to the container's port 80:
 
 ```bash
-$ sudo podman port bigapp
+sudo podman port bigapp
 ```
 
 Now connect to the port via curl:
 ```bash
-$ curl -L http://localhost:<port>/
+curl -L http://localhost:<port>/
 ```
 
 **_NOTE:_** If you see a `connection refused` message, it may be because the

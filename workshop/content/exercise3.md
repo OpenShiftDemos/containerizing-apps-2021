@@ -8,19 +8,19 @@ You'll need to perform these steps inside the virtual machine. If you forgot how
 to connect to it:
 
 ```bash
-$ echo $SSH_PASSWORD
+echo $SSH_PASSWORD
 ```
 
 Then:
 
 ```bash
-$ ssh lab-user@$SSH_HOST
+ssh lab-user@$SSH_HOST
 ```
 
 Finally:
 
 ```bash
-$ source ~/envfile
+source ~/envfile
 ```
 
 **_NOTE_**: In the steps below we use `vi` to edit files.  If you are
@@ -38,7 +38,7 @@ In the previous lab we created an "all-in-one" application. Let's enter the
 container and explore.
 
 ```bash
-$ sudo podman exec -it bigapp /bin/bash
+sudo podman exec -it bigapp /bin/bash
 ```
 
 ### Services
@@ -100,8 +100,8 @@ will need to exit the container.
 
 ```bash
 [CONTAINER_NAMESPACE]# exit
-$ sudo podman stop $(sudo podman ps -ql)
-$ sudo podman rm $(sudo podman ps -ql)
+sudo podman stop $(sudo podman ps -ql)
+sudo podman rm $(sudo podman ps -ql)
 ```
 
 If we are confident in what we are doing we can also "single-line" the above
@@ -116,12 +116,12 @@ files for the service. Please explore these directories and check out the
 contents and the startup scripts.
 
 ```bash
-$ mkdir ~/workspace
-$ cd ~/workspace
-$ cp -R ~/containerizing-apps/support/lab3/mariadb .
-$ cp -R ~/containerizing-apps/support/lab3/wordpress .
-$ ls -lR mariadb
-$ ls -lR wordpress
+mkdir ~/workspace
+cd ~/workspace
+cp -R ~/containerizing-apps/support/lab3/mariadb .
+cp -R ~/containerizing-apps/support/lab3/wordpress .
+ls -lR mariadb
+ls -lR wordpress
 ```
 
 ### MariaDB Dockerfile
@@ -375,7 +375,7 @@ greater detail in the next lab.
 to the Summit web interface.
 
 ```bash
-$ oc login -u $OS_USER $OS_API
+oc login -u $OS_USER $OS_API
 ```
 
 ### Tag images for registry
@@ -404,9 +404,9 @@ aliases in your local image store so that you can easily push the images you
 built into the OpenShift registry:
 
 ```bash
-$ sudo podman images
-$ sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
-$ sudo podman images
+sudo podman images
+sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
+sudo podman images
 ```
 
 ### Login to the registry
@@ -424,7 +424,7 @@ the username and password combination.
 The following command will fetch your token and log in to the OpenShift image registry:
 
 ```bash
-$ sudo podman login --tls-verify=false \
+sudo podman login --tls-verify=false \
   -u $OS_USER \
   -p $(oc whoami -t) \
   $OS_REGISTRY
@@ -437,20 +437,20 @@ so, before continuing, make sure that the default project exists. Execute the
 following:
 
 ```
-$ oc project
+oc project
 ```
 
 And you should see that you are using a project with the name `user-YOUR-LOGIN`.
 If you do not see this, go ahead and do:
 
 ```
-$ oc get project
+oc get project
 ```
 
 And the:
 
 ```
-$ oc project XXX
+oc project XXX
 ```
 
 Where `XXX` is the name of the project you saw in the output of the `get`
@@ -463,14 +463,14 @@ If your `get` command returns no projects, wait a few moments and try again.
 Push the images:
 
 ```bash
-$ sudo podman images
-$ sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
+sudo podman images
+sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
 ```
 
 OpenShift does some cool things for you when you push images into its registry. Try the following:
 
 ```bash
-$ oc describe imagestream wordpress -n $(oc project -q)
+oc describe imagestream wordpress -n $(oc project -q)
 ```
 
 An `ImageStream` is an OpenShift object that keeps track of changes to a
@@ -486,8 +486,8 @@ got pushed into the registry.
 Let's clean up the containers we had running.
 
 ```bash
-$ sudo podman rm -f mariadb wordpress
-$ sudo podman ps -a
+sudo podman rm -f mariadb wordpress
+sudo podman ps -a
 ```
 
 In the [next lab](../lab4/chapter4.md) we introduce container orchestration via OpenShift.

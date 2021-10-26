@@ -14,7 +14,7 @@ OpenShift web console).
 You will frequently see commands in a block like the following:
 
 ```bash
-$ echo 'hello, world!'
+echo 'hello, world!'
 ```
 
 If you wish to copy paste, you'll need to:
@@ -32,8 +32,8 @@ We have included a script for you that will set up some environment variables.
 Please execute the following:
 
 ```bash
-$ bash ~/support/lab0/setup/configure-lab.sh
-$ source ~/envfile
+bash ~/support/lab0/setup/configure-lab.sh
+source ~/envfile
 ```
 
 That was easy!
@@ -44,7 +44,7 @@ will perform all of your lab steps there. First, look at what your SSH password
 for that system is:
 
 ```bash
-$ echo $SSH_PASSWORD
+echo $SSH_PASSWORD
 ```
 
 You will need to use that password in the next step. For many operating systems
@@ -54,7 +54,7 @@ and browsers, you can highlight the password with your mouse, right click and
 Now, SSH into your lab system:
 
 ```bash
-$ ssh lab-user@$SSH_HOST
+ssh lab-user@$SSH_HOST
 ```
 
 Be sure to accept the fingerprint/connection, and then use the password above.
@@ -82,7 +82,7 @@ environment (remote to your lab terminal), you'll need to send those environment
 variables over there.
 
 ```bash
-$ scp ~/envfile lab-user@$SSH_HOST:
+scp ~/envfile lab-user@$SSH_HOST:
 ```
 
 You'll need to use the same password as before.
@@ -90,7 +90,7 @@ You'll need to use the same password as before.
 OK, now you're ready to do your labs. Go ahead and SSH back into the lab system:
 
 ```bash
-$ ssh lab-user@$SSH_HOST
+ssh lab-user@$SSH_HOST
 ```
 
 **_NOTE_:** If you want to generate an SSH key and copy it to the lab system to
@@ -107,5 +107,5 @@ Make sure you are logged into the lab VM, and then you will need to clone the
 lab content repository:
 
 ```bash
-$ git clone https://github.com/OpenShiftDemos/containerizing-apps-2021 containerizing-apps
+git clone https://github.com/OpenShiftDemos/containerizing-apps-2021 containerizing-apps
 ```

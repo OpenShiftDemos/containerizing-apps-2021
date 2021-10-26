@@ -24,19 +24,19 @@ You'll need to perform these steps inside the virtual machine. If you forgot how
 to connect to it:
 
 ```bash
-$ echo $SSH_PASSWORD
+echo $SSH_PASSWORD
 ```
 
 Then:
 
 ```bash
-$ ssh lab-user@$SSH_HOST
+ssh lab-user@$SSH_HOST
 ```
 
 Finally:
 
 ```bash
-$ source ~/envfile
+source ~/envfile
 ```
 
 Expected completion: 15-20 minutes
@@ -62,17 +62,17 @@ modifying `/etc/containers/registries.conf`. Think about the different use cases
 for that.
 
 ```bash
-$ cat /etc/containers/registries.conf #but don't add things here
-$ cat /etc/containers/registries.d/default.yaml #instead, duplicate this
-$ cat /etc/containers/storage.conf
-$ cat /etc/containers/policy.json
+cat /etc/containers/registries.conf #but don't add things here
+cat /etc/containers/registries.d/default.yaml #instead, duplicate this
+cat /etc/containers/storage.conf
+cat /etc/containers/policy.json
 ```
 
 Unlike docker, podman doesn't need an always running daemon. There are no podman
 processes running on the system:
 
 ```bash
-$ pgrep podman | wc -l
+pgrep podman | wc -l
 ```
 ## podman and buildah Help
 
@@ -83,35 +83,35 @@ in the man pages. Spend some time exploring here.
 
 Check out the executable provided:
 ```bash
-$ rpm -ql podman | grep bin
-$ rpm -ql buildah | grep bin
+rpm -ql podman | grep bin
+rpm -ql buildah | grep bin
 ```
 
 Check out the configuration file(s) that are provided:
 ```bash
-$ rpm -qc podman
-$ rpm -qc buildah
+rpm -qc podman
+rpm -qc buildah
 ```
 
 Check out the documentation that is provided:
 ```bash
-$ rpm -qd podman
-$ rpm -qd buildah
+rpm -qd podman
+rpm -qd buildah
 ```
 
 Run `podman {help,info}` to check out the storage configuration and how to find
 more information.
 ```bash
-$ podman --help
-$ podman run --help
-$ sudo podman info
+podman --help
+podman run --help
+sudo podman info
 ```
 
 Run `buildah help` to check out general options and get detailed information
 about specific options.
 ```bash
-$ buildah --help
-$ buildah copy --help
+buildah --help
+buildah copy --help
 ```
 
 ## Let's explore a Dockerfile
@@ -126,8 +126,8 @@ it automatically.
 Change to `~/containerizing-apps/support/lab1` and `cat` out the Dockerfile
 
 ```bash
-$ cd ~/containerizing-apps/support/lab1
-$ cat Dockerfile
+cd ~/containerizing-apps/support/lab1
+cat Dockerfile
 ```
 
 ```dockerfile
@@ -164,8 +164,8 @@ could use the exact same command, swapping podman for docker, to build with
 docker.
 
 ```bash
-$ sudo podman build -t redhat/apache .
-$ sudo podman images
+sudo podman build -t redhat/apache .
+sudo podman images
 ```
 
 Podman is not actually building this image, technically it is wrapping buildah
@@ -175,15 +175,15 @@ build-using-dockerfile -t redhat/apache .`. You can even see `sudo buildah
 images` will report the same thing as `sudo podman images`.
 
 ```bash
-$ sudo buildah images
+sudo buildah images
 ```
 
 ## Run the Container
 
 Next, let's run the image and make sure it started.
 ```bash
-$ sudo podman run -dt -p 8080:80 --name apache redhat/apache
-$ sudo podman ps
+sudo podman run -dt -p 8080:80 --name apache redhat/apache
+sudo podman ps
 ```
 
 Here we are using a few switches to configure the running container the way we
@@ -198,7 +198,7 @@ same commands will work.
 
 Okay, let's make sure we can access the web server.
 ```bash
-$ curl http://localhost:8080
+curl http://localhost:8080
 Apache
 ```
 
@@ -209,7 +209,7 @@ at the container IP address.  Let's use `podman inspect` to do that.
 ## Time to Inspect
 
 ```bash
-$ sudo podman inspect apache
+sudo podman inspect apache
 ```
 
 We can see that this gives us quite a bit of information in json format. We can
@@ -218,7 +218,7 @@ scroll around and find the IP address, it will be towards the bottom.
 Let's be more explicit with our `podman inspect`
 
 ```bash
-$ sudo podman inspect --format '{{ .NetworkSettings.IPAddress }}' apache
+sudo podman inspect --format '{{ .NetworkSettings.IPAddress }}' apache
 ```
 
 You can see the IP address that was assigned to the container.
@@ -231,7 +231,7 @@ Execute commands in the namespace with `podman exec <container-name> OR
 <container-id> <cmd>`
 
 ```bash
-$ sudo podman exec -it apache bash
+sudo podman exec -it apache bash
 ```
 
 Now run some commands and explore the environment. Remember, we are in a slimmed
@@ -268,7 +268,7 @@ Before we move on to the next section let's clean up the apache container so we
 don't have it hanging around.
 
 ```bash
-$ sudo podman rm -f apache
+sudo podman rm -f apache
 ```
 
 In the [next lab](../lab2/chapter2.md) we will be analyzing a monolithic
