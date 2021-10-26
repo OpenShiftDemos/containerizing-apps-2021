@@ -141,7 +141,7 @@ ls -lR wordpress
   the yum cache.
 
         RUN yum -y install \
-              mariadb-server openssl psmisc net-tools hostname procps && \
+            mariadb-server openssl psmisc net-tools hostname procps && \
             yum clean all
 
 1. Add the dependent scripts and modify permissions to support non-root
