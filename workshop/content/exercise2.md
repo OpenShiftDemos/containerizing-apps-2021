@@ -231,5 +231,5 @@ More generally:
   USER from the parent image.
 * Use `VOLUME` instruction to create a host mount point for persistent storage.
 
-In the [next lab](../lab3/chapter3.md) we will fix these issues and break the
-application up into separate services.
+In the next lab we will fix these issues and break the application up into
+separate services.

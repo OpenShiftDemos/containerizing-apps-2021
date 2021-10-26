@@ -567,6 +567,9 @@ Similarly, there is nothing keeping track of the status of these Pods. In other
 words, if one of them were to die for whatever reason, OpenShift would just let
 you know that it was no longer running when you asked. Kubernetes and OpenShift
 provide a way to keep pods running through the use of `Deployments`. There are
-many additional topics on resiliency and scale that you may wish to explore. Now
-that you are finished with this lab, perhaps browse https://learn.openshift.com
-and explore additional topics!
+many additional topics on resiliency and scale that you may wish to explore. 
+
+Now that you are finished with this lab, perhaps browse
+https://learn.openshift.com and explore additional topics! If you want your own
+temporary OpenShift cluster, you could also try out the [OpenShift Developer
+Sandbox](https://developers.redhat.com/developer-sandbox).

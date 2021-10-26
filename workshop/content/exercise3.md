@@ -498,4 +498,4 @@ sudo podman rm -f mariadb wordpress
 sudo podman ps -a
 ```
 
-In the [next lab](../lab4/chapter4.md) we introduce container orchestration via OpenShift.
+In the next lab we introduce container orchestration via OpenShift.
