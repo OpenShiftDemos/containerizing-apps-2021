@@ -32,8 +32,8 @@ worry about uptime.
 So, let's see what will happen. Launch the site:
 
 ```bash
-sudo podman run -d -p 8080:8080 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
-sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+sudo podman run -d -p 8080:8080 -p 8306:3306 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress localhost/wordpress
+sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb localhost/mariadb
 ```
 
 Use `curl` again to validate that the site is working:
@@ -48,7 +48,6 @@ by executing:
 ```bash
 sudo podman ps
 sudo podman port wordpress
-8080/tcp -> 0.0.0.0:8080
 ```
 
 First, let's get the container ID of the running database so that we can use it
@@ -111,7 +110,8 @@ the service remains available"? Enter Kubernetes/OpenShift.
 Login to OpenShift & connect to your project:
 
 **_NOTE:_** Your password for OpenShift is the same password you used to login
-to the Summit web interface.
+to the Summit web interface. Probably the name of the city you are in. Ask your
+instructor if you can't remember.
 
 ```bash
 oc login -u $OS_USER
@@ -168,13 +168,13 @@ Once the change is made, we need to rebuild the container image (remember
 container images are immutable) and push it to the OpenShift Registry.
 
 ```bash
-  $ sudo podman build -t wordpress wordpress/
-  $ sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
-  $ sudo podman login --tls-verify=false \
-    -u $OS_USER \
-    -p $(oc whoami -t) \
-    $OS_REGISTRY
-  $ sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
+  sudo podman build -t wordpress wordpress/
+  sudo podman tag localhost/wordpress $OS_REGISTRY/$(oc project -q)/wordpress
+  sudo podman login --tls-verify=false \
+  -u $OS_USER \
+  -p $(oc whoami -t) \
+  $OS_REGISTRY
+  sudo podman push --tls-verify=false $OS_REGISTRY/$(oc project -q)/wordpress
 ```
 
 You might notice that this push was a lot faster. This is because the registry
@@ -491,17 +491,17 @@ oc get services
 **_NOTE_:** these may take a while to get to a `RUNNING` state as it pulls
 the image from the registry, spins up the containers, etc.
 
-Eventually, you should see:
+Eventually, you should see the pods running:
 
 ```bash
-oc get pods
 NAME        READY     STATUS    RESTARTS   AGE
 mariadb     1/1       Running   0          45s
 wordpress   1/1       Running   0          42s
 ```
 
+And the services:
+
 ```bash
-oc get services
 NAME        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 mariadb     ClusterIP   172.30.xx.xx    <none>        3306/TCP   1m
 wordpress   ClusterIP   172.30.xx.xx    <none>        8080/TCP   1m
@@ -540,6 +540,11 @@ routes:
 
 ```bash
 oc get routes
+```
+
+Which will provide output like:
+
+```
 NAME        HOST/PORT                                                                     PATH   SERVICES    PORT   TERMINATION   WILDCARD
 wordpress   wordpress-<YOUR_USER>-container-lab.<CLUSTER_DEFAULT>          wordpress   8080                 None
 ```

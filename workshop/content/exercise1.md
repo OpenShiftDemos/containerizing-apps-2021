@@ -182,7 +182,7 @@ sudo buildah images
 
 Next, let's run the image and make sure it started.
 ```bash
-sudo podman run -dt -p 8080:80 --name apache redhat/apache
+sudo podman run -dt -p 8080:80 --name apache localhost/redhat/apache
 sudo podman ps
 ```
 
