@@ -124,12 +124,16 @@ ls -lR mariadb
 ls -lR wordpress
 ```
 
+**NOTE:** In the subsequent exercises, you will see instructions that use the
+`vi` text editor. If that's not an editor you are comfortable with, please feel
+free to use `nano`, or install whatever TUI editor you prefer.
+
 ### MariaDB Dockerfile
 
 1. In a text editor create a file named `Dockerfile` in the `mariadb` directory.
   (There is a reference file in the `mariadb` directory if needed)
 
-        $ vi mariadb/Dockerfile
+        vi mariadb/Dockerfile
 
 1. Add a `FROM` line that uses a specific image tag. Also add `maintainer`
   information.
@@ -181,7 +185,7 @@ in the `wordpress` directory if needed)
 1. Using a text editor create a file named `Dockerfile` in the `wordpress`
   directory.
 
-        $ vi wordpress/Dockerfile
+        vi wordpress/Dockerfile
 
 1. Add a `FROM` line that uses a specific image tag. Also add `maintainer`
   information.
@@ -248,20 +252,20 @@ Now we are ready to build the images to test our Dockerfiles.
 1. Build each image. When building an image podman requires the path to the
   directory of the Dockerfile.
 
-        $ sudo podman build -t mariadb mariadb/
-        $ sudo podman build -t wordpress wordpress/
+        sudo podman build -t mariadb mariadb/
+        sudo podman build -t wordpress wordpress/
 
 1. If the build does not succeed then resolve the issue and build again. Once
   successful, list the images.
 
-        $ sudo podman images
+        sudo podman images
 
 1. Create the local directories for persistent storage. Match the directory
   permissions we set in our Dockerfiles.
 
-        $ mkdir -p ~/workspace/pv/mysql ~/workspace/pv/uploads
-        $ sudo chown -R 27 ~/workspace/pv/mysql
-        $ sudo chown -R 48 ~/workspace/pv/uploads
+        mkdir -p ~/workspace/pv/mysql ~/workspace/pv/uploads
+        sudo chown -R 27 ~/workspace/pv/mysql
+        sudo chown -R 48 ~/workspace/pv/uploads
 
 1. Run the wordpress image first. See an explanation of all the `podman run`
   options we will be using below:
@@ -274,31 +278,31 @@ Now we are ready to build the images to test our Dockerfiles.
       labels on the directories before and after we run the container to see the
       changes on the labels in the directories.
     * `-p <host_port>:<container_port>` to map the container port to the host port
+      
+      **NOTE:** You are forwarding to port 8080 inside the container because the
+      Wordpress image you built has the Apache listening on 8080
 
     ```bash
-    $ ls -lZd ~/workspace/pv/uploads
-    $ sudo podman run -d -p 8080:80 -p 8306:3306 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress wordpress
+    ls -lZd ~/workspace/pv/uploads
+    sudo podman run -d -p 8080:8080 -p 8306:3306 -v ~/workspace/pv/uploads:/var/www/html/wp-content/uploads:z -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypassword -e DB_ENV_DBNAME=mydb -e DB_HOST=0.0.0.0 -e DB_PORT=3306 --name wordpress localhost/wordpress
     ```
     Note: See the difference in SELinux context after running with a volume & :z.
     ```bash
-    $ ls -lZd ~/workspace/pv/uploads
-    $ sudo podman exec wordpress ps aux #we can also directly exec commands in the container
+    ls -lZd ~/workspace/pv/uploads
+    sudo podman exec wordpress ps aux #we can also directly exec commands in the container
     ```
 
 1. Check volume directory ownership inside the container
     ```bash
-    $ sudo podman exec wordpress stat --format="%U" /var/www/html/wp-content/uploads
+    sudo podman exec wordpress stat --format="%U" /var/www/html/wp-content/uploads
     ```
 
 1. Check out how wordpress is doing
     ```bash
-    $ sudo podman logs wordpress
-    $ sudo podman ps
-    $ curl -L http://localhost:8080 #note we indicated the port to use in the run command above
+    sudo podman logs wordpress
+    sudo podman ps
+    curl -L http://localhost:8080 #note we indicated the port to use in the run command above
     ```
-
-    **_NOTE:_**: the `curl` command returns an error but demonstrates
-      a response on the port.
 
 1. Bring up the database (mariadb) for the wordpress instance.
 
@@ -309,29 +313,29 @@ Now we are ready to build the images to test our Dockerfiles.
 
     `--network=container:<alias>` to link to the wordpress container
     ```bash
-    $ ls -lZd ~/workspace/pv/mysql
-    $ sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+    ls -lZd ~/workspace/pv/mysql
+    sudo podman run -d --network=container:wordpress -v ~/workspace/pv/mysql:/var/lib/mysql:z -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb localhost/mariadb
     ```
     Note: See the difference in SELinux context after running w/ a volume & :z.
     ```bash
-    $ ls -lZd ~/workspace/pv/mysql
-    $ ls -lZ ~/workspace/pv/mysql
-    $ sudo podman exec mariadb ps aux
+    ls -lZd ~/workspace/pv/mysql
+    ls -lZ ~/workspace/pv/mysql
+    sudo podman exec mariadb ps aux
     ```
 
 1. Check volume directory ownership inside the container
     ```bash
-    $ sudo podman exec mariadb stat --format="%U" /var/lib/mysql
+    sudo podman exec mariadb stat --format="%U" /var/lib/mysql
     ```
 
 1. Check out how the database is doing
     ```bash
-    $ sudo podman logs mariadb
-    $ sudo podman ps
-    $ sudo podman exec mariadb curl localhost:3306 # gives an error but you can tell mariadb answered
-    $ sudo podman exec mariadb mysql -u user --password=mypassword -e 'show databases'
-    $ curl localhost:8306 #as you can see the db is not generally visible
-    $ curl -L http://localhost:8080 #and now wp is happier!
+    sudo podman logs mariadb
+    sudo podman ps
+    sudo podman exec mariadb curl localhost:3306 # gives an error but you can tell mariadb answered
+    sudo podman exec mariadb mysql -u user --password=mypassword -e 'show databases'
+    curl localhost:8306 #as you can see the db is not generally visible
+    curl -L http://localhost:8080 #and now wp is happier!
     ```
 
 **_NOTE:_** It might take a few moments for MariaDB to get started to the point

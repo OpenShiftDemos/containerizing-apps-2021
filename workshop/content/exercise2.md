@@ -85,7 +85,7 @@ To run the podman container based on the image we just built use the following
 command:
 
 ```bash
-sudo podman run -P --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
+sudo podman run -P --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d localhost/bigimg
 sudo podman ps
 ```
 
@@ -141,7 +141,17 @@ First detect the host port number that is is mapped to the container's port 80:
 sudo podman port bigapp
 ```
 
+You will see a string that looks like:
+
+```
+80/tcp -> 0.0.0.0:<port>
+```
+
+This is telling you that the port inside the container (`80/tcp`) is `EXPOSE`d
+and mapped to <port> on the host, available on all IP addresses.
+
 Now connect to the port via curl:
+
 ```bash
 curl -L http://localhost:<port>/
 ```
@@ -220,7 +230,8 @@ More generally:
 * Use a specific tag for the source image. Image updates may break things.
 * Place rarely changing statements towards the top of the file. This allows the
   re-use of cached image layers when rebuilding.
-* Group statements into multi-line statements. This avoids layers that have
+* Group multiple individual commands into multi-line commands. This avoids
+  creating layers that have
   files needed only for build.
 * Use `LABEL run` instruction to prescribe how the image is to be run.
 * Avoid running applications in the container as root user where possible. The
@@ -233,3 +244,6 @@ More generally:
 
 In the next lab we will fix these issues and break the application up into
 separate services.
+
+One last note: when you ran the container with `-P`, Podman looked at the
+`EXPOSE` statement and mapped all of the listed ports.
