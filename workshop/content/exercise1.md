@@ -271,5 +271,4 @@ don't have it hanging around.
 sudo podman rm -f apache
 ```
 
-In the [next lab](../lab2/chapter2.md) we will be analyzing a monolithic
-application.
+In the next lab we will be analyzing a monolithic application.
