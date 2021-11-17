@@ -130,6 +130,8 @@ cd ~/containerizing-apps/support/lab1
 cat Dockerfile
 ```
 
+The `Dockerfile` has the following content (**DO NOT RUN THESE AS COMMANDS**):
+
 ```dockerfile
 FROM registry.access.redhat.com/ubi8
 LABEL maintainer="student@example.com"
