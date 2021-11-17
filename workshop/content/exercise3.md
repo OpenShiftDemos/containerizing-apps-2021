@@ -303,6 +303,7 @@ Now we are ready to build the images to test our Dockerfiles.
     sudo podman ps
     curl -L http://localhost:8080 #note we indicated the port to use in the run command above
     ```
+    You will see an error about not being able to establish a database connection. This lets you know that Apache and PHP are working. However, you don't have MariaDB running yet, so now it's time to do that.
 
 1. Bring up the database (mariadb) for the wordpress instance.
 
